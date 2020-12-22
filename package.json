@@ -20,6 +20,7 @@
     "fmt:prettier": "yarn lint:prettier --write"
   },
   "dependencies": {
+    "@apollo/gateway": "^0.21.4",
     "@nestjs/common": "7.6.3",
     "@nestjs/config": "0.6.1",
     "@nestjs/core": "7.6.3",

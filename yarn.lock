@@ -65,6 +65,16 @@
     core-js "^3.4.0"
     lodash.xorby "^4.7.0"
 
+"@apollo/federation@^0.20.7":
+  version "0.20.7"
+  resolved "https://registry.yarnpkg.com/@apollo/federation/-/federation-0.20.7.tgz#0d26dcc3bbc92c168dc40d4f407f56d26338ef7a"
+  integrity sha512-URIayksqBaJ+xlcJmyGCf+OqHP60lX2CYGv9fDWQ1KM48sEN1ABHGXkEa0vwgWMH0XUVo94lYDVY11BAJUsuCw==
+  dependencies:
+    apollo-graphql "^0.6.0"
+    apollo-server-env "^2.4.5"
+    core-js "^3.4.0"
+    lodash.xorby "^4.7.0"
+
 "@apollo/gateway@^0.17.0":
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.17.0.tgz#beeddd001f9754c00f0cbadc03102989319655ff"
@@ -81,6 +91,25 @@
     apollo-server-errors "^2.4.2"
     apollo-server-types "^0.5.1"
     graphql-extensions "^0.12.4"
+    loglevel "^1.6.1"
+    make-fetch-happen "^8.0.0"
+    pretty-format "^26.0.0"
+
+"@apollo/gateway@^0.21.4":
+  version "0.21.4"
+  resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.21.4.tgz#8dcec7d94e89ee13a52571d16d477d4869ccc4b2"
+  integrity sha512-e8NpehH+0pQYr2wYeqRyB9i7WaTzWJw16hoI3xVJK1r4DVoSzXqjPyPv00MIBjaCHhq2vlwIe+mupjHC/aMF0g==
+  dependencies:
+    "@apollo/federation" "^0.20.7"
+    "@apollo/query-planner-wasm" "^0.0.9"
+    "@types/node-fetch" "2.5.4"
+    apollo-graphql "^0.6.0"
+    apollo-reporting-protobuf "^0.6.0"
+    apollo-server-caching "^0.5.2"
+    apollo-server-core "^2.19.0"
+    apollo-server-env "^2.4.5"
+    apollo-server-errors "^2.4.2"
+    apollo-server-types "^0.6.1"
     loglevel "^1.6.1"
     make-fetch-happen "^8.0.0"
     pretty-format "^26.0.0"
@@ -103,6 +132,11 @@
     "@types/long" "^4.0.0"
     "@types/node" "^10.1.0"
     long "^4.0.0"
+
+"@apollo/query-planner-wasm@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@apollo/query-planner-wasm/-/query-planner-wasm-0.0.9.tgz#a6640421855a86be740941779c19c1cec0d25b6b"
+  integrity sha512-PT4Dled36Ci6VwGUs4CBsv9RPL4kpAPZ+V/1aH69Ox5IlejEzt1is7SESm9e/rht2tW8ADWJX70EW7Kx/gY+rg==
 
 "@apollographql/apollo-tools@^0.4.3":
   version "0.4.8"
@@ -2145,7 +2179,7 @@ apollo-link@^1.2.14:
     tslib "^1.9.3"
     zen-observable-ts "^0.8.21"
 
-apollo-reporting-protobuf@^0.6.1:
+apollo-reporting-protobuf@^0.6.0, apollo-reporting-protobuf@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/apollo-reporting-protobuf/-/apollo-reporting-protobuf-0.6.1.tgz#09294e5f5f6b2285eb94b40621ed42113eaabea3"
   integrity sha512-qr4DheFP154PGZsd93SSIS9RkqHnR5b6vT+eCloWjy3UIpY+yZ3cVLlttlIjYvOG4xTJ25XEwcHiAExatQo/7g==
