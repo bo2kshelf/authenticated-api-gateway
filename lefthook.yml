@@ -17,10 +17,9 @@ pre-commit:
     prettier:
       run: yarn run lint:prettier
     hadolint:
-      tags: docker lint
       files: git diff --name-only --staged
-      glob: 'Dockerfile*'
-      run: yarn run lint:hadolint
+      glob: '*Dockerfile*'
+      run: yarn run lint:hadolint {staged_files}
     validate-codecov:
       files: git diff --name-only --staged
       glob: 'codecov.yml'
