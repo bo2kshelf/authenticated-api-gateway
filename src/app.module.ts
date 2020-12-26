@@ -15,6 +15,10 @@ import graphqlConfig from './graphql/graphql.config';
         gateway: {
           serviceList: [
             {name: 'books', url: configs.get<string>('graphql.booksUrl')},
+            {
+              name: 'bookcover',
+              url: configs.get<string>('graphql.bookcoverUrl'),
+            },
             {name: 'search', url: configs.get<string>('graphql.searchUrl')},
           ],
         },
