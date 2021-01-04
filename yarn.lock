@@ -75,6 +75,25 @@
     core-js "^3.4.0"
     lodash.xorby "^4.7.0"
 
+"@apollo/gateway@0.21.4":
+  version "0.21.4"
+  resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.21.4.tgz#8dcec7d94e89ee13a52571d16d477d4869ccc4b2"
+  integrity sha512-e8NpehH+0pQYr2wYeqRyB9i7WaTzWJw16hoI3xVJK1r4DVoSzXqjPyPv00MIBjaCHhq2vlwIe+mupjHC/aMF0g==
+  dependencies:
+    "@apollo/federation" "^0.20.7"
+    "@apollo/query-planner-wasm" "^0.0.9"
+    "@types/node-fetch" "2.5.4"
+    apollo-graphql "^0.6.0"
+    apollo-reporting-protobuf "^0.6.0"
+    apollo-server-caching "^0.5.2"
+    apollo-server-core "^2.19.0"
+    apollo-server-env "^2.4.5"
+    apollo-server-errors "^2.4.2"
+    apollo-server-types "^0.6.1"
+    loglevel "^1.6.1"
+    make-fetch-happen "^8.0.0"
+    pretty-format "^26.0.0"
+
 "@apollo/gateway@^0.17.0":
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.17.0.tgz#beeddd001f9754c00f0cbadc03102989319655ff"
@@ -91,25 +110,6 @@
     apollo-server-errors "^2.4.2"
     apollo-server-types "^0.5.1"
     graphql-extensions "^0.12.4"
-    loglevel "^1.6.1"
-    make-fetch-happen "^8.0.0"
-    pretty-format "^26.0.0"
-
-"@apollo/gateway@^0.21.4":
-  version "0.21.4"
-  resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.21.4.tgz#8dcec7d94e89ee13a52571d16d477d4869ccc4b2"
-  integrity sha512-e8NpehH+0pQYr2wYeqRyB9i7WaTzWJw16hoI3xVJK1r4DVoSzXqjPyPv00MIBjaCHhq2vlwIe+mupjHC/aMF0g==
-  dependencies:
-    "@apollo/federation" "^0.20.7"
-    "@apollo/query-planner-wasm" "^0.0.9"
-    "@types/node-fetch" "2.5.4"
-    apollo-graphql "^0.6.0"
-    apollo-reporting-protobuf "^0.6.0"
-    apollo-server-caching "^0.5.2"
-    apollo-server-core "^2.19.0"
-    apollo-server-env "^2.4.5"
-    apollo-server-errors "^2.4.2"
-    apollo-server-types "^0.6.1"
     loglevel "^1.6.1"
     make-fetch-happen "^8.0.0"
     pretty-format "^26.0.0"
