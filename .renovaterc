@@ -8,6 +8,7 @@
     ":separateMultipleMajorReleases",
     ":semanticCommitType(chore)",
     "schedule:weekly",
+    "docker:pinDigests",
     "github>hatena/renovate-config:automergePin",
     "github>hatena/renovate-config:automergeTypesMinor"
   ],
