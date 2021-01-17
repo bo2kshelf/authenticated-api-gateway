@@ -1,26 +1,23 @@
 import {Module} from '@nestjs/common';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GraphQLGatewayModule} from '@nestjs/graphql';
-import graphqlConfig from './graphql/graphql.config';
+import GraphqlConfig from './graphql/graphql.config';
 
 @Module({
   imports: [
     GraphQLGatewayModule.forRootAsync({
-      imports: [ConfigModule.forFeature(graphqlConfig)],
-      inject: [ConfigService],
-      useFactory: async (configs: ConfigService) => ({
+      imports: [ConfigModule.forFeature(GraphqlConfig)],
+      inject: [GraphqlConfig.KEY],
+      useFactory: async (graphqlConfig: ConfigType<typeof GraphqlConfig>) => ({
         server: {
           cors: true,
         },
         gateway: {
           serviceList: [
-            {name: 'books', url: configs.get<string>('graphql.booksUrl')},
-            {
-              name: 'bookcover',
-              url: configs.get<string>('graphql.bookcoverUrl'),
-            },
-            {name: 'search', url: configs.get<string>('graphql.searchUrl')},
-            {name: 'users', url: configs.get<string>('graphql.usersUrl')},
+            {name: 'books', url: graphqlConfig.booksUrl},
+            {name: 'bookcover', url: graphqlConfig.bookcoverUrl},
+            {name: 'search', url: graphqlConfig.searchUrl},
+            {name: 'users', url: graphqlConfig.usersUrl},
           ],
         },
       }),
