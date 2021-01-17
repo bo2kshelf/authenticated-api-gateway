@@ -20,6 +20,7 @@ import graphqlConfig from './graphql/graphql.config';
               url: configs.get<string>('graphql.bookcoverUrl'),
             },
             {name: 'search', url: configs.get<string>('graphql.searchUrl')},
+            {name: 'users', url: configs.get<string>('graphql.usersUrl')},
           ],
         },
       }),
