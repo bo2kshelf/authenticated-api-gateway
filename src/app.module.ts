@@ -1,8 +1,8 @@
 import {RemoteGraphQLDataSource} from '@apollo/gateway';
 import {Module} from '@nestjs/common';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GATEWAY_BUILD_SERVICE, GraphQLGatewayModule} from '@nestjs/graphql';
-import graphqlConfig from './graphql/graphql.config';
+import GraphqlConfig from './graphql/graphql.config';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({request, context}: any) {
@@ -33,22 +33,19 @@ class BuildServiceModule {}
 @Module({
   imports: [
     GraphQLGatewayModule.forRootAsync({
-      imports: [ConfigModule.forFeature(graphqlConfig), BuildServiceModule],
-      inject: [ConfigService, GATEWAY_BUILD_SERVICE],
-      useFactory: async (configs: ConfigService) => ({
+      imports: [ConfigModule.forFeature(GraphqlConfig), BuildServiceModule],
+      inject: [GraphqlConfig.KEY, GATEWAY_BUILD_SERVICE],
+      useFactory: async (graphqlConfig: ConfigType<typeof GraphqlConfig>) => ({
         server: {
           cors: true,
           context: ({req}) => ({req}),
         },
         gateway: {
           serviceList: [
-            {name: 'books', url: configs.get<string>('graphql.booksUrl')},
-            {
-              name: 'bookcover',
-              url: configs.get<string>('graphql.bookcoverUrl'),
-            },
-            {name: 'search', url: configs.get<string>('graphql.searchUrl')},
-            {name: 'users', url: configs.get<string>('graphql.usersUrl')},
+            {name: 'books', url: graphqlConfig.booksUrl},
+            {name: 'bookcover', url: graphqlConfig.bookcoverUrl},
+            {name: 'search', url: graphqlConfig.searchUrl},
+            {name: 'users', url: graphqlConfig.usersUrl},
           ],
         },
       }),
