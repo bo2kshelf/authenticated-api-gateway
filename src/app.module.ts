@@ -2,16 +2,37 @@ import {RemoteGraphQLDataSource} from '@apollo/gateway';
 import {Module} from '@nestjs/common';
 import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GATEWAY_BUILD_SERVICE, GraphQLGatewayModule} from '@nestjs/graphql';
+import {parse} from 'querystring';
 import GraphqlConfig from './graphql/graphql.config';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
+  private readonly tokenKey: string;
+
+  constructor(config: any, tokenKey: string) {
+    super(config);
+    this.tokenKey = tokenKey;
+  }
+
   async willSendRequest({request, context}: any) {
-    const authorization = context?.req?.headers?.authorization;
-    if (authorization) request.http.headers.set('authorization', authorization);
+    if (context?.req?.headers?.authorization) {
+      request.http.headers.set(
+        'authorization',
+        context?.req?.headers?.authorization,
+      );
+    } else if (
+      context?.req?.headers?.cookie &&
+      parse(context.req.headers.cookie)?.[this.tokenKey]
+    ) {
+      request.http.headers.set(
+        'Authorization',
+        `Bearer ${parse(context.req.headers.cookie)[this.tokenKey]!}`,
+      );
+    }
   }
 }
 
 @Module({
+  imports: [ConfigModule.forFeature(GraphqlConfig)],
   providers: [
     {
       provide: AuthenticatedDataSource,
@@ -19,10 +40,13 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     },
     {
       provide: GATEWAY_BUILD_SERVICE,
-      inject: [AuthenticatedDataSource],
-      useFactory: (AuthenticatedDataSource) => {
+      inject: [GraphqlConfig.KEY, AuthenticatedDataSource],
+      useFactory: (
+        graphqlConfig: ConfigType<typeof GraphqlConfig>,
+        AuthenticatedDataSource,
+      ) => {
         return ({url}: {name: unknown; url: unknown}) =>
-          new AuthenticatedDataSource({url});
+          new AuthenticatedDataSource({url}, graphqlConfig.cookieTokenKey);
       },
     },
   ],
@@ -37,7 +61,7 @@ class BuildServiceModule {}
       inject: [GraphqlConfig.KEY, GATEWAY_BUILD_SERVICE],
       useFactory: async (graphqlConfig: ConfigType<typeof GraphqlConfig>) => ({
         server: {
-          cors: true,
+          cors: false,
           context: ({req}) => ({req}),
         },
         gateway: {
