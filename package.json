@@ -45,7 +45,7 @@
     "@shopify/prettier-config": "1.1.2",
     "@types/express": "4.17.11",
     "@types/jest": "26.0.20",
-    "@types/node": "14.14.20",
+    "@types/node": "14.14.25",
     "@types/supertest": "2.0.10",
     "eslint": "7.16.0",
     "jest": "26.6.3",
