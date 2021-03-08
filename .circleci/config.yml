@@ -1,0 +1,68 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.1.0
+  docker: circleci/docker@1.5.0
+  codecov: codecov/codecov@1.1.3
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn run build
+      - store_artifacts:
+          path: ./dist
+
+  lint-prettier:
+    docker:
+      - image: circleci/node:14.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn run lint:prettier
+
+  lint-eslint:
+    docker:
+      - image: circleci/node:14.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - restore_cache:
+          key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run: yarn run lint:eslint --cache --format junit --output-file ./junit/eslint.xml
+      - save_cache:
+          key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - .eslintcache
+      - store_test_results:
+          path: ./junit
+
+  ts-check:
+    docker:
+      - image: circleci/node:14.14.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn run ts-check
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - lint-eslint
+      - lint-prettier
+      - docker/hadolint:
+          dockerfiles: Dockerfile
+      - ts-check
+      - build:
+          requires:
+            - lint-eslint
+            - lint-prettier
+            - ts-check
