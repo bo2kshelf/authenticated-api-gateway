@@ -1,9 +1,13 @@
 import {registerAs} from '@nestjs/config';
 
 export default registerAs('graphql', () => ({
-  cookieTokenKey: process.env.GRAPHQL_COOKIE_TOKEN_KEY!,
-  booksUrl: process.env.BOOKS_API_URL!,
-  bookcoverUrl: process.env.BOOKCOVER_API_URL!,
-  searchUrl: process.env.SEARCH_API_URL!,
-  usersUrl: process.env.USERS_API_URL!,
+  endpoints: {
+    services: {
+      neo4j: process.env.BOOKS_API_URL!,
+      bookcovoer: process.env.BOOKCOVER_API_URL!,
+      search: process.env.SEARCH_API_URL!,
+      users: process.env.USERS_API_URL!,
+    },
+    authServer: process.env.AUTH_SERVER_ENDPOINT!,
+  },
 }));
