@@ -1,6 +1,11 @@
 # dependencies
 node_modules/
 
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+
 # output
 dist/
 
