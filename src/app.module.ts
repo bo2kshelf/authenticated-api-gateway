@@ -1,52 +1,32 @@
 import {RemoteGraphQLDataSource} from '@apollo/gateway';
-import {Module} from '@nestjs/common';
+import {
+  HttpModule,
+  HttpService,
+  Module,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GATEWAY_BUILD_SERVICE, GraphQLGatewayModule} from '@nestjs/graphql';
-import {parse} from 'querystring';
-import GraphqlConfig from './graphql/graphql.config';
+import {JwtModule, JwtService} from '@nestjs/jwt';
+import {ExtractJwt} from 'passport-jwt';
+import {AppConfig} from './app.config';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
-  private readonly tokenKey: string;
-
-  constructor(config: any, tokenKey: string) {
-    super(config);
-    this.tokenKey = tokenKey;
-  }
-
   async willSendRequest({request, context}: any) {
-    if (context?.req?.headers?.authorization) {
-      request.http.headers.set(
-        'authorization',
-        context?.req?.headers?.authorization,
-      );
-    } else if (
-      context?.req?.headers?.cookie &&
-      parse(context.req.headers.cookie)?.[this.tokenKey]
-    ) {
-      request.http.headers.set(
-        'Authorization',
-        `Bearer ${parse(context.req.headers.cookie)[this.tokenKey]!}`,
-      );
-    }
+    request.permissions = context.permissions;
+    request.user = context.user;
   }
 }
 
 @Module({
-  imports: [ConfigModule.forFeature(GraphqlConfig)],
   providers: [
-    {
-      provide: AuthenticatedDataSource,
-      useValue: AuthenticatedDataSource,
-    },
+    {provide: AuthenticatedDataSource, useValue: AuthenticatedDataSource},
     {
       provide: GATEWAY_BUILD_SERVICE,
-      inject: [GraphqlConfig.KEY, AuthenticatedDataSource],
-      useFactory: (
-        graphqlConfig: ConfigType<typeof GraphqlConfig>,
-        AuthenticatedDataSource,
-      ) => {
+      inject: [AuthenticatedDataSource],
+      useFactory: (AuthenticatedDataSource) => {
         return ({url}: {name: unknown; url: unknown}) =>
-          new AuthenticatedDataSource({url}, graphqlConfig.cookieTokenKey);
+          new AuthenticatedDataSource({url});
       },
     },
   ],
@@ -57,20 +37,67 @@ class BuildServiceModule {}
 @Module({
   imports: [
     GraphQLGatewayModule.forRootAsync({
-      imports: [ConfigModule.forFeature(GraphqlConfig), BuildServiceModule],
-      inject: [GraphqlConfig.KEY, GATEWAY_BUILD_SERVICE],
-      useFactory: async (graphqlConfig: ConfigType<typeof GraphqlConfig>) => ({
+      imports: [
+        HttpModule,
+        ConfigModule.forFeature(AppConfig),
+        JwtModule.registerAsync({
+          imports: [ConfigModule.forFeature(AppConfig)],
+          inject: [AppConfig.KEY],
+          useFactory: async (config: ConfigType<typeof AppConfig>) => ({
+            secret: config.jwt.secret,
+          }),
+        }),
+        BuildServiceModule,
+      ],
+      inject: [AppConfig.KEY, HttpService, JwtService, GATEWAY_BUILD_SERVICE],
+      useFactory: async (
+        config: ConfigType<typeof AppConfig>,
+        httpService: HttpService,
+        jwtService: JwtService,
+      ) => ({
         server: {
-          cors: false,
-          context: ({req}) => ({req}),
+          context: async ({req}) => {
+            const recievedToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+            if (!recievedToken) throw new UnauthorizedException();
+
+            const payload = await jwtService.verify<{
+              userId?: string;
+              permissions?: string[];
+            }>(recievedToken);
+            if (!payload.permissions) throw new UnauthorizedException();
+
+            if (!payload.userId)
+              return {
+                permissions: payload.permissions,
+                req,
+              };
+
+            const user: {id: string} | void = await httpService
+              .get<{id: string}>(
+                new URL('/users', config.api.users.endpoint).toString(),
+                {params: {id: payload.userId}},
+              )
+              .toPromise()
+              .then(({data: user}) => user)
+              .then(({id, ...other}) => ({id}))
+              .catch(() => {});
+            if (!user) throw new UnauthorizedException();
+
+            return {
+              permissions: payload.permissions,
+              user,
+              req,
+            };
+          },
         },
         gateway: {
           serviceList: [
-            {name: 'books', url: graphqlConfig.booksUrl},
-            {name: 'bookcover', url: graphqlConfig.bookcoverUrl},
-            {name: 'search', url: graphqlConfig.searchUrl},
-            {name: 'users', url: graphqlConfig.usersUrl},
+            {name: 'books', url: config.endpoints.services.neo4j},
+            {name: 'bookcover', url: config.endpoints.services.bookcovoer},
+            {name: 'search', url: config.endpoints.services.search},
+            {name: 'users', url: config.endpoints.services.users},
           ],
+          serviceHealthCheck: true,
         },
       }),
     }),
