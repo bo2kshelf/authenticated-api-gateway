@@ -1,6 +1,10 @@
 import {registerAs} from '@nestjs/config';
 
-export default registerAs('graphql', () => ({
+export const AppConfig = registerAs('app', () => ({
+  jwt: {
+    secret: process.env.JWT_SECRET!,
+  },
+  api: {users: {endpoint: process.env.USER_API_ENDPOINT!}},
   endpoints: {
     services: {
       neo4j: process.env.BOOKS_API_URL!,

@@ -1,15 +1,20 @@
 import {RemoteGraphQLDataSource} from '@apollo/gateway';
-import {HttpModule, HttpService, Module} from '@nestjs/common';
+import {
+  HttpModule,
+  HttpService,
+  Module,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GATEWAY_BUILD_SERVICE, GraphQLGatewayModule} from '@nestjs/graphql';
-import GraphqlConfig from './graphql/graphql.config';
+import {JwtModule, JwtService} from '@nestjs/jwt';
+import {ExtractJwt} from 'passport-jwt';
+import {AppConfig} from './app.config';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({request, context}: any) {
-    request.http.headers.set(
-      'authorization',
-      context?.req?.headers?.authorization,
-    );
+    request.permissions = context.permissions;
+    request.user = context.user;
   }
 }
 
@@ -33,33 +38,56 @@ class BuildServiceModule {}
   imports: [
     GraphQLGatewayModule.forRootAsync({
       imports: [
-        ConfigModule.forFeature(GraphqlConfig),
         HttpModule,
+        ConfigModule.forFeature(AppConfig),
+        JwtModule.registerAsync({
+          imports: [ConfigModule.forFeature(AppConfig)],
+          inject: [AppConfig.KEY],
+          useFactory: async (config: ConfigType<typeof AppConfig>) => ({
+            secret: config.jwt.secret,
+          }),
+        }),
         BuildServiceModule,
       ],
-      inject: [GraphqlConfig.KEY, HttpService, GATEWAY_BUILD_SERVICE],
+      inject: [AppConfig.KEY, HttpService, JwtService, GATEWAY_BUILD_SERVICE],
       useFactory: async (
-        config: ConfigType<typeof GraphqlConfig>,
+        config: ConfigType<typeof AppConfig>,
         httpService: HttpService,
+        jwtService: JwtService,
       ) => ({
         server: {
           context: async ({req}) => {
-            if (req.headers.authorization) return {req};
-            if (req.headers.cookie)
-              await httpService
-                .get<string>(
-                  new URL(
-                    '/auth/token',
-                    config.endpoints.authServer,
-                  ).toString(),
-                  {headers: {cookie: req.headers.cookie}},
-                )
-                .toPromise()
-                .then(({data: token}) => token)
-                .then((token) => {
-                  req.headers.authorization = `Bearer ${token}`;
-                });
-            return {req};
+            const recievedToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+            if (!recievedToken) throw new UnauthorizedException();
+
+            const payload = await jwtService.verify<{
+              userId?: string;
+              permissions?: string[];
+            }>(recievedToken);
+            if (!payload.permissions) throw new UnauthorizedException();
+
+            if (!payload.userId)
+              return {
+                permissions: payload.permissions,
+                req,
+              };
+
+            const user: {id: string} | void = await httpService
+              .get<{id: string}>(
+                new URL('/users', config.api.users.endpoint).toString(),
+                {params: {id: payload.userId}},
+              )
+              .toPromise()
+              .then(({data: user}) => user)
+              .then(({id, ...other}) => ({id}))
+              .catch(() => {});
+            if (!user) throw new UnauthorizedException();
+
+            return {
+              permissions: payload.permissions,
+              user,
+              req,
+            };
           },
         },
         gateway: {
@@ -69,6 +97,7 @@ class BuildServiceModule {}
             {name: 'search', url: config.endpoints.services.search},
             {name: 'users', url: config.endpoints.services.users},
           ],
+          serviceHealthCheck: true,
         },
       }),
     }),
