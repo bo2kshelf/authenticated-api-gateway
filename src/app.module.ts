@@ -1,5 +1,6 @@
 import {RemoteGraphQLDataSource} from '@apollo/gateway';
 import {
+  BadRequestException,
   HttpModule,
   HttpService,
   Module,
@@ -8,7 +9,6 @@ import {
 import {ConfigModule, ConfigType} from '@nestjs/config';
 import {GATEWAY_BUILD_SERVICE, GraphQLGatewayModule} from '@nestjs/graphql';
 import {JwtModule, JwtService} from '@nestjs/jwt';
-import {ExtractJwt} from 'passport-jwt';
 import {AppConfig} from './app.config';
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
@@ -57,15 +57,18 @@ class BuildServiceModule {}
       ) => ({
         server: {
           context: async ({req}) => {
-            if (!req.headers.authorization) return {req};
+            const authorization: string = req.headers.authorization;
+            if (!authorization) return {req};
 
-            const recievedToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-            if (!recievedToken) throw new UnauthorizedException();
+            if (!/^(B|b)earer .*$/.test(authorization))
+              throw new BadRequestException();
+
+            const token = authorization.substr(7);
 
             const payload = await jwtService.verify<{
               userId?: string;
               permissions?: string[];
-            }>(recievedToken);
+            }>(token);
             if (!payload.permissions) throw new UnauthorizedException();
 
             if (!payload.userId)
