@@ -63,7 +63,7 @@ class BuildServiceModule {}
             if (!/^(B|b)earer .*$/.test(authorization))
               throw new BadRequestException();
 
-            const token = authorization.substr(7);
+            const token = authorization.slice(7);
 
             const payload = await jwtService.verify<{
               userId?: string;
