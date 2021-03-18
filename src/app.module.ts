@@ -57,6 +57,8 @@ class BuildServiceModule {}
       ) => ({
         server: {
           context: async ({req}) => {
+            if (!req.headers.authorization) return {req};
+
             const recievedToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
             if (!recievedToken) throw new UnauthorizedException();
 
