@@ -9,7 +9,7 @@ COPY src ./src
 RUN yarn install --frozen-lockfile
 RUN yarn build
 
-FROM node:14.15.4-slim@sha256:4ec1416247273c7318c0351e04ed997dd8c8059fc53c94e6c5a65773a299395f
+FROM node:14.15.4-slim@sha256:4f4e17e43e434774aac4d323b5b1d277028bfc646d3685883fea17ac9286b382
 
 ENV PORT 4000
 
