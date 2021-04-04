@@ -1058,16 +1058,15 @@
   resolved "https://registry.yarnpkg.com/@josephg/resolvable/-/resolvable-1.0.0.tgz#cd75b09cfad18cd945de9221d403203aa07e3d0a"
   integrity sha512-OfTtjoqB2doov5aTJxkyAMK8dXoo7CjCUQSYUEtiY34jbWduOGV7+168tmCT8COMsUEd5DMSFg/0iAOPCBTNAQ==
 
-"@nestjs/cli@7.5.7":
-  version "7.5.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-7.5.7.tgz#9d0b323fdea42b3857307acfb3b57678522e5b11"
-  integrity sha512-HPyQlRYDMJ3xIht74xzPqUDxMByMvYXyUNXPcxcarppr3OZfuekJBrouPyQJvco0BBFYC/0Col864i6Ifub93g==
+"@nestjs/cli@7.6.0":
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-7.6.0.tgz#661f99b578284f9124307a8077f004a091b25e77"
+  integrity sha512-lW1px2gSHkRoBpKSxzP6IJNQscRKs97OAaVyV46OAP6oUR996E0EPkIslIaa16kKLJ3SFOUeZo5xl5nYbqp43g==
   dependencies:
     "@angular-devkit/core" "11.2.6"
     "@angular-devkit/schematics" "11.2.6"
     "@angular-devkit/schematics-cli" "0.1102.6"
     "@nestjs/schematics" "^7.3.0"
-    "@types/webpack" "5.0.0"
     chalk "3.0.0"
     chokidar "3.5.1"
     cli-table3 "0.5.1"
@@ -1780,15 +1779,6 @@
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.0.0.tgz#365f1bf936aeaddd0856fc41aa1d6f82d88ee5b3"
   integrity sha512-WAy5txG7aFX8Vw3sloEKp5p/t/Xt8jD3GRD9DacnFv6Vo8ubudAsRTXgxpQwU0mpzY/H8U4db3roDuCMjShBmw==
-
-"@types/webpack@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-5.0.0.tgz#46fb37a31eabb6cab8b52809615a38bab6101c90"
-  integrity sha512-ZCS1DkyB403u76fCCjEIzdSYbL139Ed6ppHEUem20M+IBIldJHrI585lSxQYne9k6juTtgI5GA05PcoW2KLw/g==
-  dependencies:
-    "@types/node" "*"
-    tapable "^2.2.0"
-    webpack "^5"
 
 "@types/websocket@1.0.1":
   version "1.0.1"
@@ -9151,7 +9141,7 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@5.28.0, webpack@^5:
+webpack@5.28.0:
   version "5.28.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.28.0.tgz#0de8bcd706186b26da09d4d1e8cbd3e4025a7c2f"
   integrity sha512-1xllYVmA4dIvRjHzwELgW4KjIU1fW4PEuEnjsylz7k7H5HgPOctIq7W1jrt3sKH9yG5d72//XWzsHhfoWvsQVg==
