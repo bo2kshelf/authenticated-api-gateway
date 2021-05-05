@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["@bo2kshelf/eslint-config/nest", "plugin:@bo2kshelf/jest"]
+  "extends": ["@bo2kshelf/eslint-config/nest"]
 }
