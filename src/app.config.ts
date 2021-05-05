@@ -1,17 +1,13 @@
 import {registerAs} from '@nestjs/config';
 
 export const AppConfig = registerAs('app', () => ({
-  jwt: {
-    secret: process.env.JWT_SECRET!,
-  },
-  api: {users: {endpoint: process.env.USER_API_ENDPOINT!}},
   endpoints: {
     services: {
-      neo4j: process.env.BOOKS_API_URL!,
-      bookcovoer: process.env.BOOKCOVER_API_URL!,
-      search: process.env.SEARCH_API_URL!,
-      users: process.env.USERS_API_URL!,
+      bookcover: process.env.BOOKCOVER_SERVICE_URL!,
+      readUsers: process.env.READ_USERS_SERVICE_URL!,
+      readContents: process.env.READ_CONTENTS_SERVICE_URL!,
+      readRecords: process.env.READ_RECORDS_SERVICE_URL!,
+      currentUser: process.env.CURRENT_USER_SERVICE_URL!,
     },
-    authServer: process.env.AUTH_SERVER_ENDPOINT!,
   },
 }));
