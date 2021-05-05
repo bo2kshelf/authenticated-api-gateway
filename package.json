@@ -2,12 +2,10 @@
   "name": "comic-db",
   "private": true,
   "scripts": {
-    "prebuild": "run-s clean",
     "build": "nest build",
     "dev": "nest start --watch",
     "debug": "nest start --watch --debug ",
     "start": "nest start",
-    "clean": "rimraf dist/ coverage/",
     "ts-check": "tsc --noEmit",
     "lint": "scripty",
     "lint:circleci": "scripty",
@@ -18,7 +16,8 @@
     "lint:renovate": "scripty",
     "fmt": "run-s -cn fmt:*",
     "fmt:eslint": "yarn lint:eslint --fix",
-    "fmt:prettier": "yarn lint:prettier --write"
+    "fmt:prettier": "yarn lint:prettier --write",
+    "commitlint": "commitlint"
   },
   "dependencies": {
     "@apollo/gateway": "0.26.1",
