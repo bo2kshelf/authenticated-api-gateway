@@ -22,4 +22,4 @@ RUN yarn install --frozen-lockfile --production && yarn cache clean
 
 EXPOSE $PORT
 
-CMD ["node", "dist/main.js"]
+CMD ["yarn", "start"]
