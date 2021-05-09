@@ -34,6 +34,8 @@ supertokens.init({
     }),
   );
   app.use(['/graphql'], Session.verifySession({sessionRequired: false}));
+  app.use(supertokens.middleware());
+  app.use(supertokens.errorHandler());
 
   const server = createApolloServer();
   server.applyMiddleware({app, cors: false});
