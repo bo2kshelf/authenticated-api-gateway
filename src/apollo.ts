@@ -2,7 +2,7 @@ import {ApolloGateway, RemoteGraphQLDataSource} from '@apollo/gateway';
 import {ApolloServer} from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
 import {SessionContainer} from 'supertokens-node/recipe/session';
-import {env} from './env';
+import {JWT_SECRET, serviceList} from './config';
 
 export class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   willSendRequest({context, request}: any) {
@@ -12,13 +12,7 @@ export class AuthenticatedDataSource extends RemoteGraphQLDataSource {
 
 export const createApolloGateway = () => {
   return new ApolloGateway({
-    serviceList: [
-      env.services.bookcover,
-      env.services.readUsers,
-      env.services.readContents,
-      env.services.readRecords,
-      env.services.currentUser,
-    ],
+    serviceList,
     serviceHealthCheck: true,
     buildService({url}) {
       return new AuthenticatedDataSource({url});
@@ -38,7 +32,7 @@ export const createApolloServer = () => {
         const session: SessionContainer = (req as any).session;
         const uid = session.getUserId();
 
-        const token = await jwt.sign({uid}, env.jwt.secret, {
+        const token = await jwt.sign({uid}, JWT_SECRET, {
           expiresIn: '1m',
         });
 
