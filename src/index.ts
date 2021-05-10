@@ -4,22 +4,11 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import supertokens from 'supertokens-node';
-import EmailPassword from 'supertokens-node/recipe/emailpassword';
 import Session from 'supertokens-node/recipe/session';
 import {createApolloServer} from './apollo';
-import {env} from './env';
+import {PORT, supertoken, WEBSITE_DOMAIN} from './config';
 
-supertokens.init({
-  supertokens: {
-    connectionURI: env.supertokens.connectionURI,
-  },
-  appInfo: {
-    appName: env.supertokens.appName,
-    apiDomain: env.supertokens.domains.api,
-    websiteDomain: env.supertokens.domains.website,
-  },
-  recipeList: [Session.init(), EmailPassword.init()],
-});
+supertokens.init(supertoken);
 
 (() => {
   const app = express();
@@ -28,7 +17,7 @@ supertokens.init({
   app.use(helmet({contentSecurityPolicy: false}));
   app.use(
     cors({
-      origin: env.supertokens.domains.website,
+      origin: WEBSITE_DOMAIN,
       allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
       credentials: true,
     }),
@@ -40,5 +29,5 @@ supertokens.init({
   const server = createApolloServer();
   server.applyMiddleware({app, cors: false});
 
-  app.listen({port: env.port});
+  app.listen({port: PORT});
 })();
