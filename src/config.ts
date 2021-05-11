@@ -40,6 +40,10 @@ export const serviceList = [
     url: process.env.READ_USERS_SERVICE_URL!,
   },
   {
+    name: 'usersPicture',
+    url: process.env.USERS_PICTURE_SERVICE_URL!,
+  },
+  {
     name: 'readContents',
     url: process.env.READ_CONTENTS_SERVICE_URL!,
   },
