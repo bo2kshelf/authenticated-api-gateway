@@ -31,7 +31,7 @@
     "supertokens-node": "5.0.1"
   },
   "devDependencies": {
-    "@arkweid/lefthook": "0.7.2",
+    "@arkweid/lefthook": "0.7.5",
     "@bo2kshelf/eslint-config": "1.1.1",
     "@bo2kshelf/prettier-config": "1.0.0",
     "@commitlint/cli": "11.0.0",
