@@ -5381,10 +5381,10 @@ subscriptions-transport-ws@^0.9.11, subscriptions-transport-ws@^0.9.16:
     symbol-observable "^1.0.4"
     ws "^5.2.0"
 
-supertokens-node@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/supertokens-node/-/supertokens-node-5.0.1.tgz#f56ad2faaca2726275c44323530420ad58c697e3"
-  integrity sha512-Jy/3w/7jdHknB2EZeOB2rSBA20vWaWO5NcU9vJgBg9vm76OulG5nVjU4RlzFqb5oW0jdY5c8Fd9eUd1ds1T/Mw==
+supertokens-node@6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/supertokens-node/-/supertokens-node-6.0.2.tgz#6def9568903daecfa91415c921e28ec3c930c696"
+  integrity sha512-LkIMpU237dkm0SKhtms3hfcmviEk945KwMjDfHSi+cJQBKSwlFBFDEG7LfULqRqTZBOV60WzdJlunRmnxx28ig==
   dependencies:
     axios "0.21.1"
     body-parser "1.19.0"
