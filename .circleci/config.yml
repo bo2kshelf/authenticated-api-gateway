@@ -8,7 +8,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:15.14.0
     steps:
       - checkout
       - node/install-packages:
@@ -19,7 +19,7 @@ jobs:
 
   lint-prettier:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:15.14.0
     steps:
       - checkout
       - node/install-packages:
@@ -28,7 +28,7 @@ jobs:
 
   lint-eslint:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:15.14.0
     steps:
       - checkout
       - node/install-packages:
@@ -45,7 +45,7 @@ jobs:
 
   ts-check:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:15.14.0
     steps:
       - checkout
       - node/install-packages:
