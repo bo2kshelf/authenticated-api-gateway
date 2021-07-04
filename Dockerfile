@@ -1,4 +1,4 @@
-FROM node:14.15.4@sha256:cb01e9d98a50cab46bf75357fe4843cbfd3acca5d99c5f72794acf16c5db4f5f AS build
+FROM node:15.14.0@sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627 AS build
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 RUN yarn build
 
-FROM node:14.15.4-slim@sha256:4f4e17e43e434774aac4d323b5b1d277028bfc646d3685883fea17ac9286b382
+FROM node:15.14.0-slim@sha256:ecfa754d007a069a2ffc293115927f86416beea07b779c48c0597e26d2321bbb
 
 ENV PORT 4000
 
